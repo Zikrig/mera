@@ -68,3 +68,4 @@ def update_appointment(date, start_hour, new_data):
 def update_calendar():
     """Обновляет сводный календарь в Google Таблице"""
     sheet_manager.create_weekly_summary_sheet()
+    sheet_manager.create_months()

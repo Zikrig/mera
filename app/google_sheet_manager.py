@@ -106,6 +106,9 @@ class GoogleSheetsManager:
         # Закрепляем заголовки
         worksheet.freeze(rows=1)
 
+    def create_months(self):
+        self._create_month_sheets()
+
     def _get_worksheet(self, date):
         """Возвращает рабочий лист для указанной даты"""
         sheet_name = date.strftime("%Y-%m")
