@@ -90,7 +90,7 @@ def get_time_slots_keyboard(available_slots, dur_now=APPOINTMENT_DURATION):
     
     for start in available_slots:
         end = start + dur_now
-        time_slot = f"{start:02d}:00 - {end:02d}:00"
+        time_slot = f"{start:02d}:00"
         buttons.append(
             [InlineKeyboardButton(text=time_slot, callback_data=f"time_{start}")]
         )
