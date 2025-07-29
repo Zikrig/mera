@@ -8,15 +8,15 @@ def calculate_total(data):
     area = data["area"]
     
     if apartment_type in ["с ремонтом", "вайт бокс"]:
-        if area <= 41:
+        if area <= 40:
             total += 6000
         else:
-            total += 6000 + (area - 41) * 150
+            total += 6000 + (area - 40) * 150
     elif apartment_type == "в бетоне":
-        if area <= 41:
+        if area <= 40:
             total += 6000
         else:
-            total += 6000 + (area - 41) * 130
+            total += 6000 + (area - 40) * 130
     
     # Дополнительные услуги
     if data["em_screening"]:
