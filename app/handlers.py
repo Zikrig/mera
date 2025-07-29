@@ -39,6 +39,11 @@ MONTH_NAME_RU = {
         7: "июля", 8: "августа", 9: "сентября", 10: "октября", 11: "ноября", 12: "декабря"
     }
 
+MONTH_NAME_RU_TWOR = {
+        1: "январе", 2: "феврале", 3: "марте", 4: "апреле", 5: "мае", 6: "июне",
+        7: "июле", 8: "августе", 9: "сентябре", 10: "октябре", 11: "ноябре", 12: "декабре"
+    }
+
 async def set_main_menu():
     # Создаем список с командами и их описанием
     main_menu_commands = [
@@ -107,7 +112,7 @@ async def process_contacts(message: Message, state: FSMContext):
     
     # Переходим к вводу адреса ЖК
     await state.set_state(Form.housing_estate_address)
-    await message.answer("Пожалуйста, укажите адрес жилого комплекса (ЖК):")
+    await message.answer("Пожалуйста, укажите адрес или ЖК:")
 
 
 @router.message(Form.housing_estate_address)
@@ -132,7 +137,7 @@ async def process_area(message: Message, state: FSMContext):
         await state.update_data(area=area)
         await state.set_state(Form.em_screening)
         await message.answer(
-            "Желаете проверить квартиру на отсутствие на электромагнитное излучение?",
+            "Желаете проверить уровень электромагнитного излучения в квартире?",
             reply_markup=get_yes_no_keyboard()
         )
     except:
@@ -146,7 +151,7 @@ async def process_em_screening(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await callback.message.edit_reply_markup(reply_markup=None)  # Удаляем клавиатуру
     await callback.message.answer(
-        "Желаете проверить квартиру на отсутствие радиоактивного излучения?",
+        "Желаете проверить уровень радиации в квартире?",
         reply_markup=get_yes_no_keyboard()
     )
 
@@ -158,7 +163,7 @@ async def process_radiation_check(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await callback.message.edit_reply_markup(reply_markup=None)  # Удаляем клавиатуру
     await callback.message.answer(
-        "Желаете заказать обмер квартиры? Есть следующие варианты:\n- обычный (информационный) обмер\n- обмер в ArchiCAD (для дизайнера)",
+        "Желаете заказать обмер квартиры? Есть следующие варианты:\n- обычный (информационный) обмер\n- подготовка чертежа в программе ArchiCAD",
         reply_markup=get_measurement_keyboard()
     )
 
@@ -170,7 +175,7 @@ async def process_measurement(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await callback.message.edit_reply_markup(reply_markup=None)  # Удаляем клавиатуру
     await callback.message.answer(
-        "Желаете оценить стоимость недвижимости?",
+        "Нужна ли оценка стоимости недвижимости для банка?",
         reply_markup=get_yes_no_keyboard()
     )
 
@@ -205,7 +210,7 @@ async def process_month_selection(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Form.booking_day)
     await callback.message.edit_reply_markup(reply_markup=None)
     await callback.message.answer(
-        f"Выберите день в {MONTH_NAME_RU[month]}:",
+        f"Выберите день в {MONTH_NAME_RU_TWOR[month]}:",
         reply_markup=get_days_keyboard(year, month)
     )
 
@@ -405,7 +410,7 @@ async def choose_other_day(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Form.booking_day)
     await callback.message.edit_reply_markup(reply_markup=None)
     await callback.message.answer(
-        f"Выберите другой день в {MONTH_NAME_RU[data['booking_month']]}:",
+        f"Выберите другой день в {MONTH_NAME_RU_TWOR[data['booking_month']]}:",
         reply_markup=get_days_keyboard(data['booking_year'], data['booking_month'])
     )
 
