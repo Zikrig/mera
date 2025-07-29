@@ -338,14 +338,27 @@ async def confirm_booking(callback: CallbackQuery, state: FSMContext):
         
         # Уведомление администратору
         admin_message = (
-            "🔥 Новая запись!\n\n"
+            "🔥 Новая запись на приемку квартиры!\n\n"
+            "📌 Основная информация:\n"
             f"👤 Клиент: {data['contacts']}\n"
-            f"📅 Дата: {data['booking_day']} {month_name} {data['booking_year']} г.\n"
-            f"⏰ Время: {time_slot}\n"
+            f"📅 Дата: {data['booking_day']} {MONTH_NAME_RU.get(data['booking_month'])} {data['booking_year']} г.\n"
+            f"⏰ Время: {data['booking_time_start']:02d}:00\n"
+            f"Длительность: {continuety(data)} часа\n"
             f"📍 Адрес: {data['housing_estate_address']}\n\n"
-            f"💸 Стоимость: {int(calculate_total(data))} руб.\n"
-            f"📏 Площадь: {data['area']} м²\n"
-            f"🏠 Тип: {data['apartment_type']}"
+            
+            "📋 Характеристики объекта:\n"
+            f"🏠 Тип квартиры: {data['apartment_type']}\n"
+            f"📏 Площадь: {data['area']} м²\n\n"
+            
+            "🔍 Дополнительные услуги:\n"
+            f"⚡ Проверка ЭМИ: {'Да' if data['em_screening'] else 'Нет'}\n"
+            f"☢️ Проверка радиации: {'Да' if data['radiation_check'] else 'Нет'}\n"
+            f"📐 Тип обмера: {data['measurement_type']}\n"
+            f"💰 Оценка для банка: {'Да' if data['valuation'] else 'Нет'}\n\n"
+            
+            "💸 Финансовая информация:\n"
+            f"Итоговая стоимость: {int(calculate_total(data))} руб.\n\n"
+            
         )
         
         try:
