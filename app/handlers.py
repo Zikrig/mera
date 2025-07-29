@@ -39,14 +39,14 @@ MONTH_NAME_RU = {
         7: "июля", 8: "августа", 9: "сентября", 10: "октября", 11: "ноября", 12: "декабря"
     }
 
-# async def set_main_menu():
-#     # Создаем список с командами и их описанием
-#     main_menu_commands = [
-#         BotCommand(command='/start', description='Рестарт'),
-#         BotCommand(command='/count', description='Запись'),
-#     ]
+async def set_main_menu():
+    # Создаем список с командами и их описанием
+    main_menu_commands = [
+        BotCommand(command='/start', description='Рестарт'),
+        BotCommand(command='/count', description='Запись'),
+    ]
     
-#     await bot.set_my_commands(main_menu_commands)
+    await bot.set_my_commands(main_menu_commands)
 
 
 @router.message(Command("start"))
@@ -54,13 +54,13 @@ async def cmd_start(message: Message, state: FSMContext):
 
     # Приветственное сообщение
     await message.answer(
-        "Добро пожаловать в сервис записи на обмер квартир!",
+        "Добро пожаловать в сервис записи на обмер квартир @expert_komplex_bot!",
         reply_markup=get_inline_record_keyboard()
     )
     
     # Инлайн кнопка
     await message.answer(
-        f"\nВы можете связаться с нами по телефону {TELEPHONE}.",
+        f"\nМы рады вас видеть)",
         reply_markup=get_main_keyboard()
     )
 
@@ -71,7 +71,7 @@ async def cmd_start(message: Message, state: FSMContext):
 async def cmd_record(message: Message, state: FSMContext):
     await state.set_state(Form.apartment_type)
     await message.answer(
-        "Что лучше всего описывает вашу квартиру?",
+        "В какоим состоянии ваша квартира?",
         reply_markup=get_apartment_type_keyboard()
     )
 
@@ -117,7 +117,7 @@ async def process_area(message: Message, state: FSMContext):
         await state.update_data(area=area)
         await state.set_state(Form.em_screening)
         await message.answer(
-            "Желаете заказать скрининг на электромагнитное излучение?",
+            "Желаете проверить квартиру на отсутствие на электромагнитное излучение?",
             reply_markup=get_yes_no_keyboard()
         )
     except:
@@ -131,7 +131,7 @@ async def process_em_screening(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await callback.message.edit_reply_markup(reply_markup=None)  # Удаляем клавиатуру
     await callback.message.answer(
-        "Желаете проверить квартиру на радиацию?",
+        "Желаете проверить квартиру на отсутствие радиоактивного излучения?",
         reply_markup=get_yes_no_keyboard()
     )
 
@@ -143,7 +143,7 @@ async def process_radiation_check(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await callback.message.edit_reply_markup(reply_markup=None)  # Удаляем клавиатуру
     await callback.message.answer(
-        "Желаете заказать обмер квартиры?",
+        "Желаете заказать обмер квартиры? Есть следующие варианты:\n- обычный (информационный) обмер\n- обмер в ArchiCAD (для дизайнера)",
         reply_markup=get_measurement_keyboard()
     )
 

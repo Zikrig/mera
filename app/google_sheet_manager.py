@@ -170,7 +170,7 @@ class GoogleSheetsManager:
             day,
             records[i]["Номер"],
             new_data.get("start_hour", start_hour),
-            continuety(data),
+            continuety(new_data),
             new_data.get("area", ""),
             new_data.get("apartment_type", ""),
             "Да" if new_data.get("em_screening", False) else "Нет",
