@@ -173,7 +173,7 @@ async def process_valuation(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Form.contacts)
     await callback.answer()
     await callback.message.edit_reply_markup(reply_markup=None)  # Удаляем клавиатуру
-    await callback.message.answer("Как с вами связаться? (телефон, email или другой контакт)")
+    await callback.message.answer("Как вас зовут и как с вами связаться? (телефон, email или другой контакт)")
 
 @router.message(Form.contacts)
 async def process_contacts(message: Message, state: FSMContext):
