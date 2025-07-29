@@ -83,7 +83,7 @@ class GoogleSheetsManager:
         # Применяем серый фон для выделенных диапазонов
         if format_ranges:
             worksheet.format(format_ranges, {
-                "backgroundColor": {"red": 0.9, "green": 0.9, "blue": 0.9},
+                "backgroundColor": {"red": 0.8, "green": 0.8, "blue": 0.8},
                 "borders": {
                     "top": {"style": "SOLID"},
                     "bottom": {"style": "SOLID"},
