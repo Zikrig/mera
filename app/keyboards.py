@@ -1,9 +1,8 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
 from datetime import datetime, timedelta
 import calendar
 
 from config import *
-
 
 
 def get_restart_keyboard():
@@ -12,6 +11,22 @@ def get_restart_keyboard():
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
+def get_main_keyboard():
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="Запись")]
+        ],
+        resize_keyboard=True
+    )
+    return keyboard
+
+def get_inline_record_keyboard():
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Записаться", callback_data="record")]
+        ]
+    )
+    return keyboard
 
 def get_months_keyboard():
     today = datetime.now()
@@ -31,7 +46,6 @@ def get_months_keyboard():
         )
     
     return InlineKeyboardMarkup(inline_keyboard=buttons)
-
 
 def get_days_keyboard(year, month):
     _, num_days = calendar.monthrange(year, month)  # сколько дней в месяце, и день недели первого числа

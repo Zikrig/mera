@@ -16,6 +16,7 @@ from app.admin_work import *
 
 router = Router()
 
+from config import TELEPHONE
 
 class Form(StatesGroup):
     apartment_type = State()
@@ -35,13 +36,33 @@ MONTH_NAME_RU = {
         7: "июля", 8: "августа", 9: "сентября", 10: "октября", 11: "ноября", 12: "декабря"
     }
 
+
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
+    # Приветственное сообщение
+    await message.answer(
+        "Добро пожаловать в сервис записи на обмер квартир!",
+        reply_markup=get_inline_record_keyboard()
+    )
+    
+    # Инлайн кнопка
+    await message.answer(
+        f"\nВы можете связаться с нами по телефону {TELEPHONE}.",
+        reply_markup=get_main_keyboard()
+    )
+
+
+    
+@router.message(F.text == "Запись")
+@router.message(Command("record"))
+async def cmd_record(message: Message, state: FSMContext):
     await state.set_state(Form.apartment_type)
     await message.answer(
         "Что лучше всего описывает вашу квартиру?",
         reply_markup=get_apartment_type_keyboard()
     )
+
+
 
 @router.callback_query(F.data.startswith("apartment_"), Form.apartment_type)
 async def process_apartment_type(callback: CallbackQuery, state: FSMContext):
