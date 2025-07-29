@@ -83,6 +83,14 @@ async def cmd_record(message: Message, state: FSMContext):
     )
 
 
+@router.callback_query(F.data.startswith("record"))
+async def process_apartment_type(callback: CallbackQuery, state: FSMContext):
+    await state.set_state(Form.apartment_type)
+    await callback.message.answer(
+        "В какоим состоянии ваша квартира?",
+        reply_markup=get_apartment_type_keyboard()
+    )
+
 @router.callback_query(F.data.startswith("apartment_"), Form.apartment_type)
 async def process_apartment_type(callback: CallbackQuery, state: FSMContext):
     apartment_type = callback.data.split("_", 1)[1]
