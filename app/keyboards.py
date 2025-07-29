@@ -1,0 +1,128 @@
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from datetime import datetime, timedelta
+import calendar
+
+from config import *
+
+
+
+def get_restart_keyboard():
+    buttons = [
+        [InlineKeyboardButton(text="Заполнить заново", callback_data="restart")]
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def get_months_keyboard():
+    today = datetime.now()
+    buttons = []
+    month_names_ru = {
+        1: "Январь", 2: "Февраль", 3: "Март", 4: "Апрель", 5: "Май", 6: "Июнь",
+        7: "Июль", 8: "Август", 9: "Сентябрь", 10: "Октябрь", 11: "Ноябрь", 12: "Декабрь"
+    }
+    
+    for i in range(3):
+        month_date = today + timedelta(days=30*i)
+        year = month_date.year
+        month = month_date.month
+        month_name = month_names_ru.get(month, f"Месяц {month}")
+        buttons.append(
+            [InlineKeyboardButton(text=f"{month_name} {year}", callback_data=f"month_{year}_{month}")]
+        )
+    
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def get_days_keyboard(year, month):
+    _, num_days = calendar.monthrange(year, month)  # сколько дней в месяце, и день недели первого числа
+    first_weekday = calendar.monthrange(year, month)[0]  # 0=Пн, 6=Вс
+
+    today = datetime.now()
+    buttons = []
+    row = []
+
+    # Для текущего месяца показываем только будущие дни
+    start_day = 1
+    if year == today.year and month == today.month:
+        start_day = today.day
+
+    # Добавляем пустые кнопки перед первым числом (чтобы сдвинуть первый день на нужный день недели)
+    # first_weekday — индекс дня недели первого числа (0=Пн)
+    # Добавим пустые кнопки ровно столько, чтобы первый день был на правильном месте
+    for _ in range(first_weekday):
+        row.append(InlineKeyboardButton(text=" ", callback_data="ignore"))
+
+    # Добавляем кнопки с числами
+    for day in range(start_day, num_days + 1):
+        row.append(InlineKeyboardButton(text=str(day), callback_data=f"day_{day}"))
+        if len(row) == 7:
+            buttons.append(row)
+            row = []
+
+    # Если после добавления всех дней остались кнопки, дополним пустыми, чтобы заполнить последнюю строку до 7
+    if row:
+        while len(row) < 7:
+            row.append(InlineKeyboardButton(text=" ", callback_data="ignore"))
+        buttons.append(row)
+
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def get_time_slots_keyboard(available_slots):
+    """Создает клавиатуру с доступными временными слотами"""
+    buttons = []
+    
+    for start in available_slots:
+        end = start + APPOINTMENT_DURATION
+        time_slot = f"{start:02d}:00 - {end:02d}:00"
+        buttons.append(
+            [InlineKeyboardButton(text=time_slot, callback_data=f"time_{start}")]
+        )
+    
+    # Добавляем кнопку для выбора другого дня, если нет доступных слотов
+    if not buttons:
+        buttons.append([InlineKeyboardButton(text="Выбрать другой день", callback_data="choose_other_day")])
+    
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def get_apartment_type_keyboard():
+    buttons = [
+        [
+            InlineKeyboardButton(text="С ремонтом", callback_data="apartment_с ремонтом"),
+            InlineKeyboardButton(text="Вайтт бокс", callback_data="apartment_вайтт бокс"),
+        ],
+        [InlineKeyboardButton(text="В бетоне", callback_data="apartment_в бетоне")]
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def get_yes_no_keyboard():
+    buttons = [
+        [
+            InlineKeyboardButton(text="Да", callback_data="yes"),
+            InlineKeyboardButton(text="Нет", callback_data="no"),
+        ]
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def get_measurement_keyboard():
+    buttons = [
+        [
+            InlineKeyboardButton(text="Обычный", callback_data="measurement_regular"),
+            InlineKeyboardButton(text="В архикаде", callback_data="measurement_archicad"),
+        ],
+        [InlineKeyboardButton(text="Не нужно", callback_data="measurement_none")]
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def get_confirmation_keyboard():
+    buttons = [
+        [
+            InlineKeyboardButton(text="Подтвердить", callback_data="confirm"),
+            InlineKeyboardButton(text="Заполнить заново", callback_data="restart")
+        ]
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=buttons)

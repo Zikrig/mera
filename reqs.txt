@@ -1,0 +1,4 @@
+aiogram
+python-dotenv
+oauth2client
+gspread
