@@ -13,10 +13,10 @@ def calculate_total(data):
         else:
             total += 6000 + (area - 40) * 150
     elif apartment_type == "в бетоне":
-        if area <= 40:
+        if area <= 46:
             total += 6000
         else:
-            total += 6000 + (area - 40) * 130
+            total += 6000 + (area - 46) * 130
     
     # Дополнительные услуги
     if data["em_screening"]:
