@@ -54,13 +54,13 @@ async def cmd_start(message: Message, state: FSMContext):
 
     # Приветственное сообщение
     await message.answer(
-        "Добро пожаловать в сервис записи на обмер квартир @expert_komplex_bot!",
+        "Добро пожаловать в сервис приемки квартир \"Эксперт комплекс\"",
         reply_markup=get_inline_record_keyboard()
     )
     
     # Инлайн кнопка
     await message.answer(
-        f"\nМы рады вас видеть)",
+        f"Мы рады вас видеть) Запишитесь прямо сейчас!",
         reply_markup=get_main_keyboard()
     )
 
