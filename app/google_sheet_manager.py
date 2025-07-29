@@ -60,7 +60,7 @@ class GoogleSheetsManager:
         worksheet.update('A1:L1', [headers])
         worksheet.format('A1:L1', {
             "textFormat": {"bold": True},
-            "backgroundColor": {"red": 0.8, "green": 0.8, "blue": 0.8}
+            "backgroundColor": {"red": 0.9, "green": 0.9, "blue": 0.9}
         })
         
         # Создаем 31 набор строк (по 4 строки на каждый день)
@@ -83,7 +83,7 @@ class GoogleSheetsManager:
         # Применяем серый фон для выделенных диапазонов
         if format_ranges:
             worksheet.format(format_ranges, {
-                "backgroundColor": {"red": 0.95, "green": 0.95, "blue": 0.95},
+                "backgroundColor": {"red": 0.9, "green": 0.9, "blue": 0.9},
                 "borders": {
                     "top": {"style": "SOLID"},
                     "bottom": {"style": "SOLID"},
@@ -324,8 +324,8 @@ class GoogleSheetsManager:
         for day in range(7):
             current_date = monday + timedelta(days=day)
             day_num = current_date.day  # ← вот он, только число
-            events = "\n".join([str(e) for e in week_events.get(day, [])])
-            row.append(f"{day_num}\n{events}")
+            events = "\n\n".join([str(e) for e in week_events.get(day, [])])
+            row.append(f"{day_num}\n\n{events}")
         
         return row
 
