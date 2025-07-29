@@ -6,6 +6,8 @@ from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKe
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
+from aiogram.types import BotCommand
+
 from app.calculations import calculate_total
 from datetime import datetime, timedelta, date
 
@@ -36,9 +38,19 @@ MONTH_NAME_RU = {
         7: "июля", 8: "августа", 9: "сентября", 10: "октября", 11: "ноября", 12: "декабря"
     }
 
+# async def set_main_menu():
+#     # Создаем список с командами и их описанием
+#     main_menu_commands = [
+#         BotCommand(command='/start', description='Рестарт'),
+#         BotCommand(command='/count', description='Запись'),
+#     ]
+    
+#     await bot.set_my_commands(main_menu_commands)
+
 
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
+
     # Приветственное сообщение
     await message.answer(
         "Добро пожаловать в сервис записи на обмер квартир!",
