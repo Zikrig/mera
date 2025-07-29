@@ -78,7 +78,9 @@ def get_days_keyboard(year, month):
         while len(row) < 7:
             row.append(InlineKeyboardButton(text=" ", callback_data="ignore"))
         buttons.append(row)
-
+    
+    buttons.append([InlineKeyboardButton(text="Назад", callback_data="back_to_months")])
+    
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 

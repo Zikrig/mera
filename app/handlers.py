@@ -64,7 +64,14 @@ async def cmd_start(message: Message, state: FSMContext):
         reply_markup=get_main_keyboard()
     )
 
-
+@router.callback_query(Form.booking_day, F.data == "back_to_months")
+async def back_to_months(callback: CallbackQuery, state: FSMContext):
+    await state.set_state(Form.booking_month)
+    await callback.message.edit_text(
+        "Выберите месяц для записи:",
+        reply_markup=get_months_keyboard()
+    )
+    await callback.answer()
     
 @router.message(F.text == "Запись")
 @router.message(Command("count"))
