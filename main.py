@@ -10,7 +10,7 @@ async def run_calendar_updater():
             update_calendar()
         except Exception as e:
             print(f"Ошибка обновления календаря: {e}")
-        await asyncio.sleep(600)
+        await asyncio.sleep(300)
 
 async def main():
     dp.include_router(router)

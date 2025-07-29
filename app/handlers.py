@@ -320,7 +320,7 @@ async def confirm_booking(callback: CallbackQuery, state: FSMContext):
         month_name = MONTH_NAME_RU.get(data['booking_month'])
         start = data['booking_time_start']
         end = start + continuety(data)
-        time_slot = f"{start:02d}:00 - {end:02d}:00"
+        time_slot = f"{start:02d}:00"
         
         # Сообщение пользователю
         await callback.message.answer(
@@ -389,7 +389,7 @@ def format_result(data):
         month_name = MONTH_NAME_RU.get(data['booking_month'], f"месяца {data['booking_month']}")
         start = data['booking_time_start']
         end = start + continuety(data)
-        time_slot = f"{start:02d}:00 - {end:02d}:00"
+        time_slot = f"{start:02d}:00"
         
         lines.append(
             f"📅 Дата и время: {data['booking_day']} {month_name} {data['booking_year']} г., {time_slot}"
