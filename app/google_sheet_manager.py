@@ -48,7 +48,7 @@ class GoogleSheetsManager:
                 self._initialize_sheet(worksheet)
     
     def _initialize_sheet(self, worksheet):
-        """Инициализирует новый лист таблицы"""
+        """Инициализирует новый лист таблицы с чередующейся подсветкой дат"""
         # Заголовки столбцов
         headers = [
             "Число", "Номер", "Время", "Длит", 
@@ -65,19 +65,47 @@ class GoogleSheetsManager:
         
         # Создаем 31 набор строк (по 4 строки на каждый день)
         data = []
+        format_ranges = []  # Будем хранить диапазоны для форматирования
+        
         for day in range(1, 32):
             for slot_num in range(1, 5):
                 data.append([day, slot_num] + [""]*10)
+            
+            # Определяем, нужно ли подсвечивать эту дату (каждое второе число)
+            if (day % 2) == 0:
+                start_row = 2 + (day-1)*4  # Первая строка дня
+                end_row = start_row + 3    # Последняя строка дня
+                format_ranges.append(f"A{start_row}:L{end_row}")
         
         # Записываем данные, начиная со 2-й строки
         worksheet.update(f'A2:L{1 + len(data)}', data)
         
+        # Применяем серый фон для выделенных диапазонов
+        if format_ranges:
+            worksheet.format(format_ranges, {
+                "backgroundColor": {"red": 0.95, "green": 0.95, "blue": 0.95},
+                "borders": {
+                    "top": {"style": "SOLID"},
+                    "bottom": {"style": "SOLID"},
+                    "left": {"style": "SOLID"},
+                    "right": {"style": "SOLID"}
+                }
+            })
+        
+        # Форматируем границы для всех ячеек
+        all_data_range = f"A2:L{1 + len(data)}"
+        worksheet.format(all_data_range, {
+            "borders": {
+                "top": {"style": "SOLID", "width": 1},
+                "bottom": {"style": "SOLID", "width": 1},
+                "left": {"style": "SOLID", "width": 1},
+                "right": {"style": "SOLID", "width": 1}
+            }
+        })
+        
         # Закрепляем заголовки
         worksheet.freeze(rows=1)
-        
-        # # Устанавливаем повтор заголовков каждые 20 строк (5 наборов)
-        # worksheet.set_print_settings(repeat_rows=1)
-    
+
     def _get_worksheet(self, date):
         """Возвращает рабочий лист для указанной даты"""
         sheet_name = date.strftime("%Y-%m")
