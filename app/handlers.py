@@ -243,7 +243,7 @@ async def process_day_selection(callback: CallbackQuery, state: FSMContext):
     
     await callback.message.answer(
         f"Вы выбрали {day} {month_name} {data['booking_year']} года.\n"
-        f"Доступные временные слоты (процедура занимает {str(continuety(data))} часа):",
+        f"Доступные временные слоты", #(процедура занимает {str(continuety(data))} часа):,
         reply_markup=get_time_slots_keyboard(available_slots, dur_of)
     )
 @router.callback_query(Form.booking_time, F.data.startswith("time_"))
