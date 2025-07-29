@@ -1,10 +1,10 @@
 def check_screening_to_long(data):
     if data["apartment_type"] in ["в бетоне", "вайт бокс"]:
-        return True
+        return False
     
     if data["measurement_type"] == "archicad":
-        return True
-    return False
+        return False
+    return True
 
 def continuety(data):
     if check_screening_to_long(data):
