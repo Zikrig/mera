@@ -60,7 +60,7 @@ class GoogleSheetsManager:
         worksheet.update('A1:L1', [headers])
         worksheet.format('A1:L1', {
             "textFormat": {"bold": True},
-            "backgroundColor": {"red": 0.9, "green": 0.9, "blue": 0.9}
+            "backgroundColor": {"red": 0.8, "green": 0.8, "blue": 0.8}
         })
         
         # Создаем 31 набор строк (по 4 строки на каждый день)
