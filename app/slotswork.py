@@ -11,7 +11,7 @@ def get_busy_slots(date):
     """Возвращает список занятых временных слотов на указанную дату"""
     return sheet_manager.get_busy_slots(date)
 
-def get_available_slots(date):
+def get_available_slots(date, dur_now=APPOINTMENT_DURATION):
     """
     Возвращает список доступных временных слотов для начала процедуры
     на указанную дату с учетом:
@@ -33,26 +33,25 @@ def get_available_slots(date):
     available_starts = []
     for start in all_slots:
         # Проверяем, что интервал помещается в рабочий день
-        if start + APPOINTMENT_DURATION > WORK_HOURS[1]:
+        if start + dur_now > WORK_HOURS[1]:
             continue
             
         # Проверяем, что все слоты в интервале свободны
-        if all(slot not in occupied for slot in range(start, start + APPOINTMENT_DURATION)):
+        if all(slot not in occupied for slot in range(start, start + dur_now)):
             available_starts.append(start)
     
     return available_starts
 
-def is_slot_available(date, start_hour):
+def is_slot_available(date, start_hour, dur_now=APPOINTMENT_DURATION):
     """Проверяет, свободен ли слот для бронирования"""
-    if start_hour < WORK_HOURS[0] or start_hour + APPOINTMENT_DURATION > WORK_HOURS[1]:
+    if start_hour < WORK_HOURS[0] or start_hour + dur_now > WORK_HOURS[1]:
         return False
         
     busy_slots = get_busy_slots(date)
     occupied = []
     for start, duration in busy_slots:
         occupied.extend(range(start, start + duration))
-    
-    return all(slot not in occupied for slot in range(start_hour, start_hour + APPOINTMENT_DURATION))
+    return all(slot not in occupied for slot in range(start_hour, start_hour + dur_now))
 
 def add_appointment(data):
     """Добавляет запись в Google Таблицу"""

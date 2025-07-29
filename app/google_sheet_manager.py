@@ -4,7 +4,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime, timedelta, date
 from threading import Timer
 
-from config import CREDENTIALS_FILE, SPREADSHEET_ID, APPOINTMENT_DURATION
+from config import CREDENTIALS_FILE, SPREADSHEET_ID
+from app.utils import continuety
 
 class GoogleSheetsManager:
     def __init__(self):
@@ -128,7 +129,7 @@ class GoogleSheetsManager:
             day,
             records[i]["Номер"],
             data["start_hour"],
-            APPOINTMENT_DURATION,
+            continuety(data),
             data["area"],
             data["apartment_type"],
             "Да" if data["em_screening"] else "Нет",
@@ -169,7 +170,7 @@ class GoogleSheetsManager:
             day,
             records[i]["Номер"],
             new_data.get("start_hour", start_hour),
-            APPOINTMENT_DURATION,
+            continuety(data),
             new_data.get("area", ""),
             new_data.get("apartment_type", ""),
             "Да" if new_data.get("em_screening", False) else "Нет",

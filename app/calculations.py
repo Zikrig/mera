@@ -7,7 +7,7 @@ def calculate_total(data):
     apartment_type = data["apartment_type"]
     area = data["area"]
     
-    if apartment_type in ["с ремонтом", "вайтт бокс"]:
+    if apartment_type in ["с ремонтом", "вайт бокс"]:
         if area <= 41:
             total += 6000
         else:

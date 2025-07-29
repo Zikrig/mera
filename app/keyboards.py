@@ -23,7 +23,7 @@ def get_main_keyboard():
 def get_inline_record_keyboard():
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="Записаться", callback_data="record")]
+            [InlineKeyboardButton(text="Запись", callback_data="record")]
         ]
     )
     return keyboard
@@ -82,12 +82,12 @@ def get_days_keyboard(year, month):
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-def get_time_slots_keyboard(available_slots):
+def get_time_slots_keyboard(available_slots, dur_now=APPOINTMENT_DURATION):
     """Создает клавиатуру с доступными временными слотами"""
     buttons = []
     
     for start in available_slots:
-        end = start + APPOINTMENT_DURATION
+        end = start + dur_now
         time_slot = f"{start:02d}:00 - {end:02d}:00"
         buttons.append(
             [InlineKeyboardButton(text=time_slot, callback_data=f"time_{start}")]
@@ -104,7 +104,7 @@ def get_apartment_type_keyboard():
     buttons = [
         [
             InlineKeyboardButton(text="С ремонтом", callback_data="apartment_с ремонтом"),
-            InlineKeyboardButton(text="Вайтт бокс", callback_data="apartment_вайтт бокс"),
+            InlineKeyboardButton(text="Вайт бокс", callback_data="apartment_вайт бокс"),
         ],
         [InlineKeyboardButton(text="В бетоне", callback_data="apartment_в бетоне")]
     ]

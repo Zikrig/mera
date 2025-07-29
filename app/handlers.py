@@ -15,6 +15,7 @@ from config import *
 from app.keyboards import *
 from app.slotswork import *
 from app.admin_work import *
+from app.utils import continuety
 
 router = Router()
 
@@ -66,14 +67,13 @@ async def cmd_start(message: Message, state: FSMContext):
 
     
 @router.message(F.text == "Запись")
-@router.message(Command("record"))
+@router.message(Command("count"))
 async def cmd_record(message: Message, state: FSMContext):
     await state.set_state(Form.apartment_type)
     await message.answer(
         "Что лучше всего описывает вашу квартиру?",
         reply_markup=get_apartment_type_keyboard()
     )
-
 
 
 @router.callback_query(F.data.startswith("apartment_"), Form.apartment_type)
@@ -201,9 +201,10 @@ async def process_day_selection(callback: CallbackQuery, state: FSMContext):
     
     # Создаем объект даты для проверки доступности
     selected_date = date(data['booking_year'], data['booking_month'], day)
-    
+    dur_of = continuety(data)
+
     # Получаем доступные слоты
-    available_slots = get_available_slots(selected_date)
+    available_slots = get_available_slots(selected_date, dur_of)
     
     # Если нет доступных слотов, предлагаем выбрать другой день
     if not available_slots:
@@ -227,8 +228,8 @@ async def process_day_selection(callback: CallbackQuery, state: FSMContext):
     
     await callback.message.answer(
         f"Вы выбрали {day} {month_name} {data['booking_year']} года.\n"
-        f"Доступные временные слоты (процедура занимает {APPOINTMENT_DURATION} часа):",
-        reply_markup=get_time_slots_keyboard(available_slots)
+        f"Доступные временные слоты (процедура занимает {str(continuety(data))} часа):",
+        reply_markup=get_time_slots_keyboard(available_slots, dur_of)
     )
 @router.callback_query(Form.booking_time, F.data.startswith("time_"))
 async def process_time_selection(callback: CallbackQuery, state: FSMContext):
@@ -239,16 +240,16 @@ async def process_time_selection(callback: CallbackQuery, state: FSMContext):
     selected_date = date(data['booking_year'], data['booking_month'], data['booking_day'])
     
     # Проверяем, свободен ли выбранный слот
-    if not is_slot_available(selected_date, start_hour):
+    if not is_slot_available(selected_date, start_hour, continuety(data)):
         await callback.answer("Этот слот уже занят, пожалуйста, выберите другое время", show_alert=True)
-        
+        dur_of = continuety(data)
         # Получаем доступные слоты
-        available_slots = get_available_slots(selected_date)
+        available_slots = get_available_slots(selected_date, dur_of)
         
         # Обновляем сообщение с новыми доступными слотами
         await callback.message.edit_text(
             f"Доступные временные слоты на {selected_date.day} {selected_date.month} {selected_date.year}:",
-            reply_markup=get_time_slots_keyboard(available_slots)
+            reply_markup=get_time_slots_keyboard(available_slots, dur_of)
         )
         return
     
@@ -303,7 +304,7 @@ async def confirm_booking(callback: CallbackQuery, state: FSMContext):
 
         month_name = MONTH_NAME_RU.get(data['booking_month'])
         start = data['booking_time_start']
-        end = start + APPOINTMENT_DURATION
+        end = start + continuety(data)
         time_slot = f"{start:02d}:00 - {end:02d}:00"
         
         # Сообщение пользователю
@@ -347,7 +348,7 @@ def format_result(data):
     """Форматирует результат в читаемый вид"""
     apartment_types = {
         "с ремонтом": "Квартира с ремонтом",
-        "вайтт бокс": "Квартира Вайтт бокс",
+        "вайт бокс": "Квартира Вайт бокс",
         "в бетоне": "Квартира в бетоне"
     }
     
@@ -372,7 +373,7 @@ def format_result(data):
     if 'booking_year' in data:
         month_name = MONTH_NAME_RU.get(data['booking_month'], f"месяца {data['booking_month']}")
         start = data['booking_time_start']
-        end = start + APPOINTMENT_DURATION
+        end = start + continuety(data)
         time_slot = f"{start:02d}:00 - {end:02d}:00"
         
         lines.append(
