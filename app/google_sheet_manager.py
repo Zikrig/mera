@@ -286,7 +286,7 @@ class GoogleSheetsManager:
                         else:
                             start_time = int(record['Время'])
 
-                        duration = record['Длит']
+                        duration = int(record['Длит'])
                         
                         event_date = date(
                             month_info["month"].year,
