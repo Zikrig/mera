@@ -27,7 +27,7 @@ def get_available_slots(date, dur_now=APPOINTMENT_DURATION):
     # Помечаем занятые слоты
     occupied = []
     for start, duration in busy_slots:
-        occupied.extend(range(start, start + duration))
+        occupied.extend(range(start, str(int(start) + int(duration))))
     
     # Находим доступные 4-часовые интервалы
     available_starts = []
