@@ -57,7 +57,14 @@ def is_slot_available(date, start_hour, dur_now=APPOINTMENT_DURATION):
     busy_slots = get_busy_slots(date)
     occupied = []
     for start, duration in busy_slots:
-        occupied.extend(range(start, start + duration))
+        if isinstance(start, str) and ':' in start:
+            time_parts = start.split(':')
+            start = int(time_parts[0])
+        # Если время - целое число
+        else:
+            start = int(start)
+
+        occupied.extend(range(start, start + int(duration)))
     return all(slot not in occupied for slot in range(start_hour, start_hour + dur_now))
 
 def add_appointment(data):
