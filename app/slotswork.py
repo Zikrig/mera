@@ -34,7 +34,7 @@ def get_available_slots(date, dur_now=APPOINTMENT_DURATION):
         else:
             start_time = int(start)
 
-        occupied.extend(range(start, str(start_time + int(duration))))
+        occupied.extend(range(start, start_time + int(duration)))
     
     # Находим доступные 4-часовые интервалы
     available_starts = []
