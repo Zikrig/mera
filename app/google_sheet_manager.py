@@ -213,7 +213,7 @@ class GoogleSheetsManager:
         ]
         
         # Обновляем строку
-        worksheet.update(f'A{row_index}:L{row_index}', [values])
+        worksheet.update(f'A{str(row_index)}:L{str(row_index)}', [values])
         self.create_weekly_summary_sheet()
         
         return True, "Запись успешно обновлена"
@@ -282,7 +282,7 @@ class GoogleSheetsManager:
                         record["Число"]
                     )
                     event_info = (
-                        f"{record['Время']}:00-{record['Время']+record['Длит']}:00 "
+                        f"{record['Время']}:00-{str(record['Время']+record['Длит'])}:00 "
                         f"{record['Тип']} {record['Площадь']}м²"
                     )
                     all_events.append((event_date, event_info))
