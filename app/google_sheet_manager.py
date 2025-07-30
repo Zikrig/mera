@@ -271,21 +271,33 @@ class GoogleSheetsManager:
         weekdays = ["Неделя", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
         grid = [weekdays]
         
-        # Собираем все события за 3 месяца
         all_events = []
         for month_info in months_data:
             for record in month_info["data"]:
                 if record["Время"]:
-                    event_date = date(
-                        month_info["month"].year,
-                        month_info["month"].month,
-                        record["Число"]
-                    )
-                    event_info = (
-                        f"{record['Время']}:00-{str(record['Время']+record['Длит'])}:00 "
-                        f"{record['Тип']} {record['Площадь']}м²"
-                    )
-                    all_events.append((event_date, event_info))
+                    try:
+                        # Явное преобразование типов
+                        day = int(record["Число"])
+                        start_time = int(record['Время'])
+                        duration = record['Длит']
+                        
+                        event_date = date(
+                            month_info["month"].year,
+                            month_info["month"].month,
+                            day  # Теперь int
+                        )
+                        
+                        # Корректное вычисление времени окончания
+                        end_time = str(start_time + duration)
+                        event_info = (
+                            f"{record['Время']}:00-{end_time}:00 "  # Ошибка!
+                            f"{record['Тип']} {record['Площадь']}м²"
+                        )
+                        all_events.append((event_date, event_info))
+                        
+                    except (TypeError, ValueError) as e:
+                        print(f"Ошибка обработки записи: {record} - {str(e)}")
+                        continue
         
         # Группируем по неделям
         current_week = None
