@@ -278,7 +278,14 @@ class GoogleSheetsManager:
                     try:
                         # Явное преобразование типов
                         day = int(record["Число"])
-                        start_time = int(record['Время'])
+                        
+                        if isinstance(record['Время'], str) and ':' in record['Время']:
+                            time_parts = record['Время'].split(':')
+                            start_time = int(time_parts[0])
+                        # Если время - целое число
+                        else:
+                            start_time = int(record['Время'])
+
                         duration = record['Длит']
                         
                         event_date = date(
