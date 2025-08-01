@@ -30,17 +30,21 @@ def get_inline_record_keyboard():
 
 def get_months_keyboard():
     today = datetime.now()
-    buttons = []
     month_names_ru = {
         1: "Январь", 2: "Февраль", 3: "Март", 4: "Апрель", 5: "Май", 6: "Июнь",
         7: "Июль", 8: "Август", 9: "Сентябрь", 10: "Октябрь", 11: "Ноябрь", 12: "Декабрь"
     }
-    
+    buttons = []
+    month_prev = today
+    month_date = today
     for i in range(3):
-        month_date = today + timedelta(days=30*i)
+        month_date += timedelta(days=30)
+        if month_date == month_prev:
+            month_date += timedelta(days=1)
         year = month_date.year
         month = month_date.month
         month_name = month_names_ru.get(month, f"Месяц {month}")
+        month_prev = month_date
         buttons.append(
             [InlineKeyboardButton(text=f"{month_name} {year}", callback_data=f"month_{year}_{month}")]
         )
