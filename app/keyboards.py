@@ -38,9 +38,9 @@ def get_months_keyboard():
     month_prev = today
     month_date = today
     for i in range(3):
-        month_date += timedelta(days=30)
+        month_date += timedelta(days=28)
         if month_date == month_prev:
-            month_date += timedelta(days=1)
+            month_date += timedelta(days=4)
         year = month_date.year
         month = month_date.month
         month_name = month_names_ru.get(month, f"Месяц {month}")
