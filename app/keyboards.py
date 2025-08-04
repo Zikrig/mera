@@ -34,19 +34,30 @@ def get_months_keyboard():
         1: "Январь", 2: "Февраль", 3: "Март", 4: "Апрель", 5: "Май", 6: "Июнь",
         7: "Июль", 8: "Август", 9: "Сентябрь", 10: "Октябрь", 11: "Ноябрь", 12: "Декабрь"
     }
+    
     buttons = []
-    month_prev = today
-    month_date = today
+    day = int(today.month)
+    year = int(today.year)
+    day2 = day + 1
+    if day2 > 12:
+        day2 = 1
+    day3 = day2 + 1
+    if day3 > 12:
+        day3 = 1
+    
+    ret = []
     for i in range(3):
-        month_date += timedelta(days=28)
-        if month_date.month == month_prev.month:
-            month_date += timedelta(days=4)
-        year = month_date.year
-        month = month_date.month
-        month_name = month_names_ru.get(month, f"Месяц {month}")
-        month_prev = month_date
+        d = [day, day2, day3][i]
+        if i == 2 and d == 1:
+            year +=1
+        if i == 1 and d == 1:
+            year +=1
+        # ret.append((d, year))
+        month_name = month_names_ru
+        month = d
+        yr = str(year)
         buttons.append(
-            [InlineKeyboardButton(text=f"{month_name} {year}", callback_data=f"month_{year}_{month}")]
+            [InlineKeyboardButton(text=f"{month_name} {yr}", callback_data=f"month_{yr}_{month}")]
         )
     
     return InlineKeyboardMarkup(inline_keyboard=buttons)
