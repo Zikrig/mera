@@ -53,7 +53,7 @@ def get_months_keyboard():
         if i == 1 and d == 1:
             year +=1
         # ret.append((d, year))
-        month_name = month_names_ru
+        month_name = month_names_ru[d]
         month = d
         yr = str(year)
         buttons.append(
