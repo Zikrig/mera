@@ -63,37 +63,43 @@ def get_months_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 def get_days_keyboard(year, month):
-    _, num_days = calendar.monthrange(year, month)  # сколько дней в месяце, и день недели первого числа
+    _, num_days = calendar.monthrange(year, month)
     first_weekday = calendar.monthrange(year, month)[0]  # 0=Пн, 6=Вс
 
     today = datetime.now()
     buttons = []
     row = []
 
-    # Для текущего месяца показываем только будущие дни
+    # Определяем начальный день отображения
     start_day = 1
     if year == today.year and month == today.month:
         start_day = today.day
 
-    # Добавляем пустые кнопки перед первым числом (чтобы сдвинуть первый день на нужный день недели)
-    # first_weekday — индекс дня недели первого числа (0=Пн)
-    # Добавим пустые кнопки ровно столько, чтобы первый день был на правильном месте
+    # Добавляем пустые кнопки для дней недели до первого числа
     for _ in range(first_weekday):
         row.append(InlineKeyboardButton(text=" ", callback_data="ignore"))
 
-    # Добавляем кнопки с числами
+    # Добавляем пустые кнопки для всех прошедших дней (1 до start_day-1)
+    for day in range(1, start_day):
+        row.append(InlineKeyboardButton(text=" ", callback_data="ignore"))
+        if len(row) == 7:
+            buttons.append(row)
+            row = []
+
+    # Добавляем активные кнопки для дней (start_day до конца месяца)
     for day in range(start_day, num_days + 1):
         row.append(InlineKeyboardButton(text=str(day), callback_data=f"day_{day}"))
         if len(row) == 7:
             buttons.append(row)
             row = []
 
-    # Если после добавления всех дней остались кнопки, дополним пустыми, чтобы заполнить последнюю строку до 7
+    # Дополняем последнюю строку пустыми кнопками при необходимости
     if row:
         while len(row) < 7:
             row.append(InlineKeyboardButton(text=" ", callback_data="ignore"))
         buttons.append(row)
     
+    # Добавляем кнопку "Назад"
     buttons.append([InlineKeyboardButton(text="Назад", callback_data="back_to_months")])
     
     return InlineKeyboardMarkup(inline_keyboard=buttons)
